@@ -54,8 +54,22 @@ import java.time.Duration;
         }
         public double calculateFee(double hourlyRate) {
             int hoursParked = calculateHoursParked();
-            return hoursParked * hourlyRate;
+            int remainingHours = hoursParked % 24;
+            int fee;
+            if (hoursParked <= 3) {
+                fee = 2;
+            } else if (hoursParked <= 6) {
+                fee = 4;
+            } else if (hoursParked <= 12) {
+                fee = 6;
+            } else if (hoursParked <= 18) {
+                fee = 8;
+            } else {
+                fee = 12;
+            }
+            return hourlyRate;
         }
+
         @Override
         public String toString() {
             return "ParkingSection{" +
