@@ -1,4 +1,4 @@
-package ParkingTicked.src.main.java.com.sda;
+package com.sda;
 
 import java.time.Duration;
 
