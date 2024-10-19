@@ -1,84 +1,49 @@
 package com.sda;
-
-    import java.time.LocalDateTime;
+import java.time.LocalDateTime;
 import java.time.Duration;
 
-    public class ParkingSection {
-        private int id;
-        private String licensePlate;
-        private int slotId;
-        private int entryHour;
-        private int exitHour;
+public class ParkingSection {
+    private int id;
+    private LocalDateTime entryTime;
+    private LocalDateTime exitTime;
+    private String licensePlate;
+    private int slotId;
 
-        public ParkingSection(int id, String licensePlate, int slotId, int entryHour,int exitHour) {
-            this.id = id;
-            this.licensePlate = licensePlate;
-            this.slotId = slotId;
-            this.entryHour = this.entryHour;
-            this.exitHour = -1;
-        }
-
-        public ParkingSection(int id, String licensePlate, int slotId) {
-        }
-
-        public int getId() {
-            return id;
-        }
-
-        public String getLicensePlate() {
-            return licensePlate;
-        }
-
-        public int getSlotId() {
-            return slotId;
-        }
-
-        public int getEntryHour() {
-            return entryHour;
-        }
-
-        public int getExitHour() {
-            return exitHour;
-        }
-        public void setExitHour(int exitHour) {
-            if (exitHour < entryHour) {
-                throw new IllegalArgumentException("Exit hour cannot be before entry hour");
-            }
-            this.exitHour = exitHour;
-        }
-        public int calculateHoursParked() {
-            if (exitHour == -1) {
-                throw new IllegalStateException("Car has not exited yet");
-            }
-            return exitHour - entryHour;
-        }
-        public double calculateFee(double hourlyRate) {
-            int hoursParked = calculateHoursParked();
-            int remainingHours = hoursParked % 24;
-            int fee;
-            if (hoursParked <= 3) {
-                fee = 2;
-            } else if (hoursParked <= 6) {
-                fee = 4;
-            } else if (hoursParked <= 12) {
-                fee = 6;
-            } else if (hoursParked <= 18) {
-                fee = 8;
-            } else {
-                fee = 12;
-            }
-            return hourlyRate;
-        }
-
-        @Override
-        public String toString() {
-            return "ParkingSection{" +
-                    "id=" + id +
-                    ", licensePlate='" + licensePlate + '\'' +
-                    ", slotId=" + slotId +
-                    ", entryHour=" + entryHour +
-                    ", exitHour=" + (exitHour == -1 ? "Still parked" : exitHour) +
-                    '}';
-        }
+    public ParkingSection(int id, String licensePlate, int slotId) {
+        this.id = id;
+        this.licensePlate = licensePlate;
+        this.slotId = slotId;
+        this.entryTime = LocalDateTime.now();
     }
 
+    public int getId() {
+        return id;
+    }
+
+    public LocalDateTime getEntryTime() {
+        return entryTime;
+    }
+
+    public LocalDateTime getExitTime() {
+        return exitTime;
+    }
+
+    public void setExitTime(LocalDateTime exitTime) {
+        this.exitTime = exitTime;
+    }
+
+    public String getLicensePlate() {
+        return licensePlate;
+    }
+
+    public int getSlotId() {
+        return slotId;
+    }
+
+    public Duration calculateDuration() {
+        if (exitTime == null) {
+            return Duration.between(entryTime, LocalDateTime.now());
+        }
+        return Duration.between(entryTime, exitTime);
+    }
+}

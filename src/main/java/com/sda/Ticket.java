@@ -5,14 +5,13 @@ import java.time.Duration;
 public class Ticket {
     private final int id;
     private final double price;
-    private final Duration duration;
+
     private final String costumerName;
     private final boolean isMember;
 
-    public Ticket(int id, double price, Duration duration, String costumerName, boolean isMember) {
+    public Ticket(int id, double price, String costumerName, boolean isMember) {
         this.id = id;
         this.price = price;
-        this.duration = duration;
         this.costumerName = costumerName;
         this.isMember = isMember;
     }
