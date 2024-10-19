@@ -14,7 +14,9 @@ public class Customer {
     private String gender;
     private boolean isDisabled;
 
-    public Customer(int id, String firstName, String lastName, boolean isMember, LocalDate membershipStartDate, String licensePlate, String emergencyContact, String gender, boolean isDisabled) {
+    public Customer(int id, String firstName, String lastName, boolean isMember,
+                    LocalDate membershipStartDate, String licensePlate, String emergencyContact,
+                    String gender, boolean isDisabled) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
