@@ -11,7 +11,7 @@ public class ParkingManagementSystem {
         DatabaseManager.initializeDatabase();
 
         while (true) {
-            System.out.println("\n--- Sistemi i Menaxhimit të Parkingut ---");
+            System.out.println("\n--- Parking Tirana ---");
             System.out.println("1. Shto një makinë në parking");
             System.out.println("2. Gjenero biletë dhe llogarit tarifën");
             System.out.println("3. Shfaq vendet e lira të parkimit");
