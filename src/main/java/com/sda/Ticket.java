@@ -16,7 +16,6 @@ public class Ticket {
         this.costumerName = costumerName;
         this.isMember = isMember;
     }
-    //fddf
 
     public int getId() {
         return id;
