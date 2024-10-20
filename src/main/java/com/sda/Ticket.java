@@ -10,15 +10,13 @@ public class Ticket {
     private final Duration duration;
     private static final double RATE_PER_HOUR = 10.0;
     private static final double RATE_PER_MINUTE = 0.5;
-    private final String companyName;
 
-    public Ticket(int id, double price, String customerName, boolean isMember, Duration duration, String companyName) {
+    public Ticket(int id, double price, String customerName, boolean isMember, Duration duration) {
         this.id = id;
         this.price = price;
         this.customerName = customerName;
         this.isMember = isMember;
         this.duration = duration;
-        this.companyName = companyName;
     }
 
     public int getId() {
@@ -41,29 +39,23 @@ public class Ticket {
         return isMember;
     }
 
-    public String getCompanyName() {
-        return companyName;
-    }
-
-    private double calculatePrice() {
+    public double calculatePrice() {
         long hours = duration.toHours();
         long minutes = duration.toMinutes() % 60;
 
         double basePrice = (hours * RATE_PER_HOUR) + (minutes * RATE_PER_MINUTE);
+        return isMember ? basePrice * 0.8 : basePrice; // Zbritja për anëtarët
+    }
 
-
-        return isMember ? basePrice * 0.8 : basePrice;
+    @Override
+    public String toString() {
+        return String.format("Ticket{id=%d, price=%.2f, duration=%s, customerName='%s', isMember=%b}",
+                id, price, getDurationInHoursAndMinutes(), customerName, isMember);
     }
 
     public String getDurationInHoursAndMinutes() {
         long hours = duration.toHours();
         long minutes = duration.toMinutes() % 60;
         return String.format("%d ore dhe %d minuta", hours, minutes);
-    }
-
-    @Override
-    public String toString() {
-        return String.format("Ticket{id=%d, price=%.2f, duration=%s, customerName='%s', isMember=%b, companyName='%s'}",
-                id, price, getDurationInHoursAndMinutes(), customerName, isMember, companyName);
     }
 }
