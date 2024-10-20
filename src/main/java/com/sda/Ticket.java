@@ -44,7 +44,7 @@ public class Ticket {
         long minutes = duration.toMinutes() % 60;
 
         double basePrice = (hours * RATE_PER_HOUR) + (minutes * RATE_PER_MINUTE);
-        return isMember ? basePrice * 0.8 : basePrice; // Zbritja për anëtarët
+        return isMember ? basePrice * 0.8 : basePrice;
     }
 
     @Override

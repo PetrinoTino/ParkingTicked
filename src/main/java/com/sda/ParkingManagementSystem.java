@@ -1,45 +1,43 @@
 package com.sda;
+
 import java.util.Scanner;
 import java.util.List;
 import java.time.LocalDateTime;
 
 public class ParkingManagementSystem {
     private static final Scanner scanner = new Scanner(System.in);
+    private static final int ADD_CAR = 1;
+    private static final int GENERATE_TICKET = 2;
+    private static final int SHOW_AVAILABLE_SLOTS = 3;
+    private static final int DISPLAY_PARKED_CARS = 4;
+    private static final int SHOW_TOTAL_EARNINGS = 5;
+    private static final int EXIT = 6;
 
     public static void main(String[] args) {
         DatabaseManager.testConnection();
         DatabaseManager.initializeDatabase();
 
         while (true) {
-            System.out.println("\n--- Parking Tirana ---");
-            System.out.println("1. Shto një makinë në parking");
-            System.out.println("2. Gjenero biletë dhe llogarit tarifën");
-            System.out.println("3. Shfaq vendet e lira të parkimit");
-            System.out.println("4. Shfaq makinat aktualisht të parkuara");
-            System.out.println("5. Shfaq fitimet totale");
-            System.out.println("6. Dil");
-            System.out.print("Zgjidhni një opsion: ");
-
-            int choice = scanner.nextInt();
-            scanner.nextLine(); // Consume newline
+            displayMenu();
+            int choice = getUserChoice();
 
             switch (choice) {
-                case 1:
+                case ADD_CAR:
                     addCar();
                     break;
-                case 2:
+                case GENERATE_TICKET:
                     generateTicket();
                     break;
-                case 3:
+                case SHOW_AVAILABLE_SLOTS:
                     showAvailableSlots();
                     break;
-                case 4:
+                case DISPLAY_PARKED_CARS:
                     displayParkedCars();
                     break;
-                case 5:
+                case SHOW_TOTAL_EARNINGS:
                     showTotalEarnings();
                     break;
-                case 6:
+                case EXIT:
                     System.out.println("Duke dalë nga sistemi...");
                     return;
                 default:
@@ -48,9 +46,31 @@ public class ParkingManagementSystem {
         }
     }
 
+    private static void displayMenu() {
+        System.out.println("\n--- Parking Tirana ---");
+        System.out.println("1. Shto një makinë në parking");
+        System.out.println("2. Gjenero biletë dhe llogarit tarifën");
+        System.out.println("3. Shfaq vendet e lira të parkimit");
+        System.out.println("4. Shfaq makinat aktualisht të parkuara");
+        System.out.println("5. Shfaq fitimet totale");
+        System.out.println("6. Dil");
+        System.out.print("Zgjidhni një opsion: ");
+    }
+
+    private static int getUserChoice() {
+        while (true) {
+            try {
+                int choice = Integer.parseInt(scanner.nextLine());
+                return choice;
+            } catch (NumberFormatException e) {
+                System.out.print("Ju lutem vendosni një numër të vlefshëm: ");
+            }
+        }
+    }
+
     private static void addCar() {
         System.out.print("Vendosni targën e makinës: ");
-        String licensePlate =   scanner.nextLine().trim();
+        String licensePlate = scanner.nextLine().trim();
 
         System.out.print("Vendosni emrin e klientit: ");
         String firstName = scanner.nextLine().trim();
@@ -87,8 +107,11 @@ public class ParkingManagementSystem {
             System.out.println("Makina nuk u gjet në parking.");
             return;
         }
+
         section.setExitTime(LocalDateTime.now());
         int slotId = section.getSlotId();
+
+        Duration duration = section.calculateDuration();
 
         System.out.print("Vendosni emrin e plotë të klientit: ");
         String customerName = scanner.nextLine().trim();
@@ -96,7 +119,14 @@ public class ParkingManagementSystem {
         System.out.print("A është klienti anëtar? (po/jo): ");
         boolean isMember = scanner.nextLine().trim().equalsIgnoreCase("po");
 
-        Ticket ticket = new Ticket((int) System.currentTimeMillis(), section.calculateDuration(), customerName, isMember);
+        double ticketPrice = (duration.toHours() * Ticket.RATE_PER_HOUR) +
+                ((duration.toMinutes() % 60) * Ticket.RATE_PER_MINUTE);
+
+        if (isMember) {
+            ticketPrice *= 0.8; // Zbritja për anëtarët
+        }
+
+        Ticket ticket = new Ticket((int) System.currentTimeMillis(), ticketPrice, customerName, isMember, duration);
         DatabaseManager.saveTicket(ticket);
 
         DatabaseManager.updateParkingSlotAvailability(slotId, true);
