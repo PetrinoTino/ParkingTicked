@@ -1,11 +1,15 @@
-package com.sda;
+package com.sda.jdbc;
+import com.sda.entity.Customer;
+import com.sda.entity.ParkingSection;
+import com.sda.entity.ParkingSlot;
+import com.sda.entity.Ticket;
+
 import java.sql.*;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
 public class DatabaseManager {
-    private static final String URL = "jdbc:mysql://localhost:3306/parking_management";
+/*    private static final String URL = "jdbc:mysql://localhost:3306/parking_management";
     private static final String USER = "root";
     private static final String PASSWORD = "root";
 
@@ -232,5 +236,5 @@ public class DatabaseManager {
         } catch (SQLException e) {
             System.out.println("Gabim gjatë lidhjes me bazën e të dhënave: " + e.getMessage());
         }
-    }
+    }*/
 }

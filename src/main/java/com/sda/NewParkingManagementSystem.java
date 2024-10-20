@@ -1,18 +1,17 @@
 package com.sda;
 
-import com.sda.entity.Customer;
-import com.sda.entity.ParkingSection;
-import com.sda.entity.ParkingSlot;
-import com.sda.entity.Ticket;
-import com.sda.jdbc.DatabaseManager;
+import com.sda.service.CustomerService;
+import com.sda.service.ParkingSectionService;
+import com.sda.service.ParkingSlotService;
 
-import java.time.Duration;
 import java.util.Scanner;
-import java.util.List;
-import java.time.LocalDateTime;
 
-public class ParkingManagementSystem {
-/*    private static final Scanner scanner = new Scanner(System.in);
+public class NewParkingManagementSystem {
+    private static final CustomerService customerService = new CustomerService();
+    private static final ParkingSectionService parkingSectionService = new ParkingSectionService();
+    private static final ParkingSlotService parkingSlotService = new ParkingSlotService();
+    private static final Scanner scanner = new Scanner(System.in);
+
     private static final int ADD_CAR = 1;
     private static final int GENERATE_TICKET = 2;
     private static final int SHOW_AVAILABLE_SLOTS = 3;
@@ -21,10 +20,10 @@ public class ParkingManagementSystem {
     private static final int EXIT = 6;
 
     public static void main(String[] args) {
-        DatabaseManager.testConnection();
-        DatabaseManager.initializeDatabase();
+        System.out.println("=== Menu ===");
 
-        while (true) {
+        boolean exit = false;
+        while (!exit) {
             displayMenu();
             int choice = getUserChoice();
 
@@ -33,20 +32,21 @@ public class ParkingManagementSystem {
                     addCar();
                     break;
                 case GENERATE_TICKET:
-                    generateTicket();
+//                    generateTicket();
                     break;
                 case SHOW_AVAILABLE_SLOTS:
-                    showAvailableSlots();
+//                    showAvailableSlots();
                     break;
                 case DISPLAY_PARKED_CARS:
-                    displayParkedCars();
+//                    displayParkedCars();
                     break;
                 case SHOW_TOTAL_EARNINGS:
-                    showTotalEarnings();
+//                    showTotalEarnings();
                     break;
                 case EXIT:
+                    exit = true;
                     System.out.println("Duke dalë nga sistemi...");
-                    return;
+                    break;
                 default:
                     System.out.println("Zgjedhje e pavlefshme. Ju lutem provoni përsëri.");
             }
@@ -88,24 +88,16 @@ public class ParkingManagementSystem {
         System.out.print("A është klienti anëtar? (po/jo): ");
         boolean isMember = scanner.nextLine().trim().equalsIgnoreCase("po");
 
-        List<ParkingSlot> availableSlots = DatabaseManager.getAvailableParkingSlots();
-        if (availableSlots.isEmpty()) {
-            System.out.println("Na vjen keq, nuk ka vende parkimi të disponueshme.");
-            return;
-        }
-        ParkingSlot slot = availableSlots.get(0);
-        DatabaseManager.updateParkingSlotAvailability(slot.getId(), false);
+        int slotId = parkingSlotService.updateParkingSlotAvailability();
+        if (slotId == -1) return;
 
-        Customer customer = new Customer((int) System.currentTimeMillis(), firstName, lastName, isMember);
-        DatabaseManager.saveCustomer(customer);
-
-        ParkingSection section = new ParkingSection((int) System.currentTimeMillis(), licensePlate, slot.getId());
-        DatabaseManager.saveParkingSection(section);
+        customerService.saveCustomer(firstName, lastName, isMember);
+        parkingSectionService.saveParkingSection(licensePlate, slotId);
 
         System.out.println("Makina u shtua me sukses në parking.");
     }
 
-    private static void generateTicket() {
+/*    private static void generateTicket() {
         System.out.print("Vendosni targën e makinës: ");
         String licensePlate = scanner.nextLine().trim();
 
