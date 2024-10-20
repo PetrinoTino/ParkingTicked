@@ -5,15 +5,20 @@ import java.time.Duration;
 public class Ticket {
     private final int id;
     private final double price;
-
-    private final String costumerName;
+    private final String customerName;
     private final boolean isMember;
+    private final Duration duration;
+    private static final double RATE_PER_HOUR = 10.0;
+    private static final double RATE_PER_MINUTE = 0.5;
+    private final String companyName;
 
-    public Ticket(int id, double price, String costumerName, boolean isMember) {
+    public Ticket(int id, double price, String customerName, boolean isMember, Duration duration, String companyName) {
         this.id = id;
         this.price = price;
-        this.costumerName = costumerName;
+        this.customerName = customerName;
         this.isMember = isMember;
+        this.duration = duration;
+        this.companyName = companyName;
     }
 
     public int getId() {
@@ -44,10 +49,9 @@ public class Ticket {
         long hours = duration.toHours();
         long minutes = duration.toMinutes() % 60;
 
-
         double basePrice = (hours * RATE_PER_HOUR) + (minutes * RATE_PER_MINUTE);
 
-        // Zbritja për anëtarët
+
         return isMember ? basePrice * 0.8 : basePrice;
     }
 
