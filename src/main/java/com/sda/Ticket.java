@@ -3,13 +3,15 @@ package com.sda;
 import java.time.Duration;
 
 public class Ticket {
+    public static final int RATE_PER_HOUR = (int) 10.0;
+    public static final int RATE_PER_MINUTE = (int) 0.5;
     private final int id;
     private final double price;
     private final String customerName;
     private final boolean isMember;
     private final Duration duration;
-    private static final double RATE_PER_HOUR = 10.0;
-    private static final double RATE_PER_MINUTE = 0.5;
+
+
 
     public Ticket(int id, double price, String customerName, boolean isMember, Duration duration) {
         this.id = id;

@@ -1,5 +1,6 @@
 package com.sda;
 
+import java.time.Duration;
 import java.util.Scanner;
 import java.util.List;
 import java.time.LocalDateTime;
@@ -119,7 +120,7 @@ public class ParkingManagementSystem {
         System.out.print("A është klienti anëtar? (po/jo): ");
         boolean isMember = scanner.nextLine().trim().equalsIgnoreCase("po");
 
-        double ticketPrice = (duration.toHours() * Ticket.RATE_PER_HOUR) +
+        double ticketPrice = (((Duration) duration).toHours() * Ticket.RATE_PER_HOUR) +
                 ((duration.toMinutes() % 60) * Ticket.RATE_PER_MINUTE);
 
         if (isMember) {
